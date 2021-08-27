@@ -8,7 +8,6 @@ import feedparser
 import requests
 import itertools
 
-
 from telegram.ext import CommandHandler
 from telegram import ParseMode
 
@@ -19,10 +18,11 @@ from pyrogram.parser import html as pyrogram_html
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.handlers import MessageHandler, CallbackQueryHandler
 
-from bot import app, dispatcher, IMAGE_URL
+from bot import app, dispatcher, bot
 from bot.helper import custom_filters
 from bot.helper.telegram_helper.bot_commands import BotCommands
 from bot.helper.telegram_helper.filters import CustomFilters
+from bot.helper.telegram_helper.message_utils import sendMessage
 
 search_lock = asyncio.Lock()
 search_info = {False: dict(), True: dict()}
@@ -72,14 +72,14 @@ async def return_search(query, page=1, sukebei=False):
 message_info = dict()
 ignore = set()
 
-@app.on_message(filters.command(['nyaasi']))
+@app.on_message(filters.command(['nyaasi', f'nyaasi@{bot.username}']))
 async def nyaa_search(client, message):
     text = message.text.split(' ')
     text.pop(0)
     query = ' '.join(text)
     await init_search(client, message, query, False)
 
-@app.on_message(filters.command(['sukebei']))
+@app.on_message(filters.command(['sukebei', f'sukebei@{bot.username}']))
 async def nyaa_search_sukebei(client, message):
     text = message.text.split(' ')
     text.pop(0)
@@ -89,7 +89,7 @@ async def nyaa_search_sukebei(client, message):
 async def init_search(client, message, query, sukebei):
     result, pages, ttl = await return_search(query, sukebei=sukebei)
     if not result:
-        await message.reply_text('🚫 No results found 🚫')
+        await message.reply_text('🚫 No Results Found 🚫')
     else:
         buttons = [InlineKeyboardButton(f'1/{pages}', 'nyaa_nop'), InlineKeyboardButton(f'Next', 'nyaa_next')]
         if pages == 1:
@@ -166,7 +166,7 @@ class TorrentSearch:
         self.source = source.rstrip('/')
         self.RESULT_STR = result_str
 
-        app.add_handler(MessageHandler(self.find, filters.command([command])))
+        app.add_handler(MessageHandler(self.find, filters.command([command, f'{self.command}@{bot.username}'])))
         app.add_handler(CallbackQueryHandler(self.previous, filters.regex(f"{self.command}_previous")))
         app.add_handler(CallbackQueryHandler(self.delete, filters.regex(f"{self.command}_delete")))
         app.add_handler(CallbackQueryHandler(self.next, filters.regex(f"{self.command}_next")))
@@ -208,7 +208,7 @@ class TorrentSearch:
 
         res_lim = min(self.RESULT_LIMIT, len(self.response) - self.RESULT_LIMIT*self.index)
         result = f"**Page - {self.index+1}**\n\n"
-        result += "\n\n==============================================\n\n".join(
+        result += "\n\n=======================\n\n".join(
             self.get_formatted_string(self.response[self.response_range[self.index]+i])
             for i in range(res_lim)
         )
@@ -225,7 +225,7 @@ class TorrentSearch:
             return
 
         query = urlencode(message.text.split(None, 1)[1])
-        self.message = await message.reply_text("🔎 Searching 🔎")
+        self.message = await message.reply_text("Searching")
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(f"{self.source}/{query}") as resp:
@@ -237,7 +237,7 @@ class TorrentSearch:
                     self.response = result
                     self.response_range = range(0, len(self.response), self.RESULT_LIMIT)
         except:
-            await self.message.edit("🚫 No Results Found 🚫")
+            await self.message.edit("No Results Found.")
             return
         await self.update_message()
 
@@ -332,7 +332,7 @@ Available :
 • /rarbg [Keyword]
 • /ts [Keyword]
 '''
-    update.effective_message.reply_photo(IMAGE_URL, help_string, parse_mode=ParseMode.HTML)
+    sendMessage(help_string, context.bot, update)
     
     
 SEARCHHELP_HANDLER = CommandHandler(BotCommands.TsHelpCommand, searchhelp, filters=(CustomFilters.authorized_chat | CustomFilters.authorized_user) & CustomFilters.mirror_owner_filter, run_async=True)
