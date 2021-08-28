@@ -50,8 +50,8 @@ async def return_search(query, page=1, sukebei=False):
                 splitted = urlsplit(link)
                 if splitted.scheme == 'magnet' and splitted.query:
                     link = f'<code>{link}</code>'
-                newtext = f'''<b>{a + 1}.</b> <b>Name : {html.escape(i["title"])}</b>
-<b>🔗 Link :</b> {link}
+                newtext = f'''<b>{a + 1}.</b> <b>📄 Title : {html.escape(i["title"])}</b>
+<b>🔗 Link :-</b> {link}
 <b>📥 Total Size : {i["nyaa_size"]}</b> 
 <b>🔍 Tracker :- 🧲 Seeds : {i["nyaa_seeders"]} | 🧲 Peers : {i["nyaa_leechers"]} </b>
 <b>🔖 Category : {i["nyaa_category"]}</b>\n\n'''
@@ -181,7 +181,7 @@ class TorrentSearch:
         string = self.RESULT_STR.format(**values)
         extra = ""
         if "Files" in values:
-            tmp_str = "\n\n 🧲 [{Quality} - {Type} ({Size})]({Torrent}) : `{magnet}`"
+            tmp_str = "\n 🧲 [{Quality} - {Type} ({Size})]({Torrent}) : `{magnet}`"
             extra += "\n".join(
                 tmp_str.format(**f, magnet=self.format_magnet(f['Magnet']))
                 for f in values['Files']
@@ -221,11 +221,11 @@ class TorrentSearch:
 
     async def find(self, client, message):
         if len(message.command) < 2:
-            await message.reply_text(f"Usage: /{self.command} query")
+            await message.reply_text(f"<b>Usage :</b> /{self.command} <b>Keyword / Query</b>")
             return
 
         query = urlencode(message.text.split(None, 1)[1])
-        self.message = await message.reply_text("Searching")
+        self.message = await message.reply_text("🔍 <b>Searching</b> 🔎")
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(f"{self.source}/{query}") as resp:
@@ -237,7 +237,7 @@ class TorrentSearch:
                     self.response = result
                     self.response_range = range(0, len(self.response), self.RESULT_LIMIT)
         except:
-            await self.message.edit("No Results Found.")
+            await self.message.edit("🚫 <b>No Results Found</b> 🚫")
             return
         await self.update_message()
 

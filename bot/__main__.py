@@ -40,16 +40,16 @@ def stats(update, context):
             f'<b> 🖥️ CPU  : {cpuUsage}%</b>\n ' \
             f'<b>⚙️ RAM : {memory}%</b>\n ' \
             f'<b>🗃️ DISK  : {disk}%</b>'
-    update.effective_message.reply_photo(IMAGE_URL, stats, parse_mode=ParseMode.HTML)
+    sendMessage(stats, context.bot, update)
 
 
 def start(update, context):
     start_string = f'''
-This Bot can mirroring your file/link download to upload on Google Drive (For Better Fast Speed & Full Speed Bandwidth).
+This Bot can mirroring your file/link download to upload on Google Drive (For Better Fast Speed & Full Speed Bandwidth).\n\n
 Type /{BotCommands.HelpCommand} to get a list of available commands
 '''
     buttons = button_build.ButtonMaker()
-    buttons.buildbutton("Owner", "https://t.me/hilmay619")
+    buttons.buildbutton("😎", "https://t.me/hilmay619")
     reply_markup = InlineKeyboardMarkup(buttons.build_menu(2))
     if CustomFilters.authorized_user(update) or CustomFilters.authorized_chat(update):
         if update.message.chat.type == "private" :
@@ -75,7 +75,7 @@ def ping(update, context):
     start_time = int(round(time.time() * 1000))
     reply = sendMessage("Starting Ping", context.bot, update)
     end_time = int(round(time.time() * 1000))
-    editMessage(f'❇️ {end_time - start_time} ms', reply)
+    editMessage(f'🖥 PING {end_time - start_time} MS', reply)
 
 
 def log(update, context):

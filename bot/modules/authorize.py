@@ -22,9 +22,9 @@ def authorize(update, context):
                 with open('authorized_chats.txt', 'a') as file:
                     file.write(f'{user_id}\n')
                     AUTHORIZED_CHATS.add(user_id)
-                    msg = '✅ User Authorized ✅'
+                    msg = '✅ <b>User Authorized</b> ✅'
         else:
-            msg = '✅ User Already Authorized ✅'
+            msg = '✅ <b>User Already Authorized</b> ✅'
     else:
         if reply_message is None:
             # Trying to authorize a chat
@@ -36,9 +36,9 @@ def authorize(update, context):
                     with open('authorized_chats.txt', 'a') as file:
                         file.write(f'{chat_id}\n')
                         AUTHORIZED_CHATS.add(chat_id)
-                        msg = '✅ Chat Authorized ✅'
+                        msg = '✅ <b>Chat Authorized</b> ✅'
             else:
-                msg = '✅ Chat Already Authorized ✅'
+                msg = '✅ <b>Chat Already Authorized</b> ✅'
 
         else:
             # Trying to authorize someone by replying
@@ -50,9 +50,9 @@ def authorize(update, context):
                     with open('authorized_chats.txt', 'a') as file:
                         file.write(f'{user_id}\n')
                         AUTHORIZED_CHATS.add(user_id)
-                        msg = '✅ User Authorized ✅'
+                        msg = '✅ <b>User Authorized</b> ✅'
             else:
-                msg = '✅ User Already Authorized ✅'
+                msg = '✅ <b>User Already Authorized</b> ✅'
     sendMessage(msg, context.bot, update)
 
 
@@ -68,9 +68,9 @@ def unauthorize(update, context):
                 msg = DbManger().db_unauth(user_id)
             else:
                 AUTHORIZED_CHATS.remove(user_id)
-                msg = '🚫 User Unauthorized 🚫'
+                msg = '🚫 <b>User Unauthorized</b> 🚫'
         else:
-            msg = '🚫 User Already Unauthorized 🚫'
+            msg = '🚫 <b>User Already Unauthorized</b> 🚫'
     else:
         if reply_message is None:
             # Trying to unauthorize a chat
@@ -80,9 +80,9 @@ def unauthorize(update, context):
                     msg = DbManger().db_unauth(chat_id)
                 else:
                     AUTHORIZED_CHATS.remove(chat_id)
-                    msg = '🚫 Chat Unauthorized 🚫'
+                    msg = '🚫 <b>Chat Unauthorized</b> 🚫'
             else:
-                msg = '🚫 Chat Already Unauthorized 🚫'
+                msg = '🚫 <b>Chat Already Unauthorized</b> 🚫'
         else:
             # Trying to authorize someone by replying
             user_id = reply_message.from_user.id
@@ -91,9 +91,9 @@ def unauthorize(update, context):
                     msg = DbManger().db_unauth(user_id)
                 else:
                     AUTHORIZED_CHATS.remove(user_id)
-                    msg = '🚫 User Unauthorized 🚫'
+                    msg = '🚫 <b>User Unauthorized</b> 🚫'
             else:
-                msg = '🚫 User Already Unauthorized 🚫'
+                msg = '🚫 <b>User Already Unauthorized</b> 🚫'
     with open('authorized_chats.txt', 'a') as file:
         file.truncate(0)
         for i in AUTHORIZED_CHATS:
@@ -115,12 +115,12 @@ def addSudo(update, context):
                 with open('sudo_users.txt', 'a') as file:
                     file.write(f'{user_id}\n')
                     SUDO_USERS.add(user_id)
-                    msg = '✅ Promoted as Sudo Permission ✅'
+                    msg = '✅ <b>Promoted as Sudo Permission</b> ✅'
         else:
-            msg = '✅ User Already Sudo Permission ✅'
+            msg = '✅ <b>User Already Sudo Permission</b> ✅'
     else:
         if reply_message is None:
-            msg = "🚫 Give Me ID or Reply to Message of whom you want to Promote 🚫"
+            msg = "🚫 <b>Give Me Telegram ID or Reply to the Person's Message</b> 🚫"
         else:
             # Trying to authorize someone by replying
             user_id = reply_message.from_user.id
@@ -131,9 +131,9 @@ def addSudo(update, context):
                     with open('sudo_users.txt', 'a') as file:
                         file.write(f'{user_id}\n')
                         SUDO_USERS.add(user_id)
-                        msg = '✅ Promoted as Sudo Permission ✅'
+                        msg = '✅ <b>Promoted as Sudo Permission</b> ✅'
             else:
-                msg = '✅ User Already Sudo Permission ✅'
+                msg = '✅ <b>User Already Sudo Permission</b> ✅'
     sendMessage(msg, context.bot, update)
 
 
@@ -151,10 +151,10 @@ def removeSudo(update, context):
                 SUDO_USERS.remove(user_id)
                 msg = 'Demoted'
         else:
-            msg = '🚫 Not a Sudo Permission 🚫'
+            msg = '🚫 <b>Not a Sudo Permission</b> 🚫'
     else:
         if reply_message is None:
-            msg = "🚫 Give Me ID or Reply to Message of whom you want to Promote 🚫"
+            msg = "🚫 <b>Give Me Telegram ID or Reply to the Person's Message</b> 🚫"
         else:
             user_id = reply_message.from_user.id
             if user_id in SUDO_USERS:
@@ -164,7 +164,7 @@ def removeSudo(update, context):
                     SUDO_USERS.remove(user_id)
                     msg = 'Demoted'
             else:
-                msg = '🚫 Not a Sudo Permission 🚫'
+                msg = '🚫 <b>Not a Sudo Permission</b> 🚫'
     if DB_URI is None:
         with open('sudo_users.txt', 'a') as file:
             file.truncate(0)

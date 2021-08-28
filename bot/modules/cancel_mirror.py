@@ -28,7 +28,7 @@ def cancel_mirror(update, context):
             except:
                 pass
     if len(args) == 1:
-        msg = f"🚫 <b>Reply</b> <code>/{BotCommands.CancelMirror}</code> <b>to your mirror progress or Send<b/> <code>/{BotCommands.CancelMirror}</code> <b>GID CODE</b> to cancel mirror 🚫"
+        msg = f"🚫 <b>Reply</b> <code>/{BotCommands.CancelMirror}</code> <b>GID Code to Cancel Mirror</b> 🚫"
         if mirror_message and mirror_message.message_id not in keys:
             if BotCommands.MirrorCommand in mirror_message.text or \
                BotCommands.TarMirrorCommand in mirror_message.text or \

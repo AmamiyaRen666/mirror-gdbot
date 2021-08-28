@@ -123,27 +123,28 @@ def get_readable_message():
                 msg += f"\n<b>🗃️ Total Size : {download.size()}</b>"
                 msg += f"\n<b>🌀 Status : {download.status()}</b>"
                 if download.status() != MirrorStatus.STATUS_ARCHIVING and download.status() != MirrorStatus.STATUS_EXTRACTING:
-                    msg += f"\n<code>{get_progress_bar_string(download)} {download.progress()}</code>"
+                    msg += f"\n🚀 <b>{get_progress_bar_string(download)} {download.progress()}</b> 💨"
                     if download.status() == MirrorStatus.STATUS_CLONING:
-                        msg += f"\n<b>Cloned:</b> <code>{get_readable_file_size(download.processed_bytes())}</code> of <code>{download.size()}</code>"
+                        msg += f"\n♻️ <b>Cloned : {get_readable_file_size(download.processed_bytes())} of {download.size()}</b>"
                     elif download.status() == MirrorStatus.STATUS_UPLOADING:
-                        msg += f"\n<b>Uploaded:</b> <code>{get_readable_file_size(download.processed_bytes())}</code> of <code>{download.size()}</code>"
+                        msg += f"\n🔺 <b>Uploaded : {get_readable_file_size(download.processed_bytes())} of {download.size()}</b>"
                     else:
-                        msg += f"\n<b>Downloaded:</b> <code>{get_readable_file_size(download.processed_bytes())}</code> of <code>{download.size()}</code>"
+                        msg += f"\n🔻 <b>Downloaded : {get_readable_file_size(download.processed_bytes())} of {download.size()}</b> "
                     msg += f"\n<b>⚡️ Speed : {download.speed()}</b>" \
-                           f"\n<b>⏳ ETA :</b> <code>{download.eta()}</code>"
+                           f"\n<b>⏳ ETA : {download.eta()} </b>"
                     # if hasattr(download, 'is_torrent'):
                     try:
-                        msg += f"\n<b>Seeders:</b> <code>{download.aria_download().num_seeders}</code>" \
-                            f" | <b>Peers:</b> <code>{download.aria_download().connections}</code>"
+                        msg += f"\n<b>🔍 Tracker :- 🧲 Seeders : {download.aria_download().num_seeders}</b>" \
+                            f" | <b>🧲 Peers : {download.aria_download().connections}</b>"
                     except:
                         pass
                     try:
-                        msg += f"\n<b>Seeders:</b> <code>{download.torrent_info().num_seeds}</code>" \
-                            f" | <b>Leechers:</b> <code>{download.torrent_info().num_leechs}</code>"
+                        msg += f"\n<b>🔍 Tracker :- 🧲 Seeders : {download.torrent_info().num_seeds}</b>" \
+                            f" | <b>🧲 Leechers : {download.torrent_info().num_leechs}</b>"
                     except:
                         pass
-                    msg += f"\n<b>🚫 Cancel :</b> <code>/{BotCommands.CancelMirror} {download.gid()}</code>"
+                    msg += f"\n<b>🔰 GID : {download.gid()}</b>" \
+                       f"\n<b>🚫 Cancel :</b> <code>/{BotCommands.CancelMirror} {download.gid()}</code>"
                 msg += "\n\n"
                 if STATUS_LIMIT is not None:
                     if INDEX >= COUNT + STATUS_LIMIT:

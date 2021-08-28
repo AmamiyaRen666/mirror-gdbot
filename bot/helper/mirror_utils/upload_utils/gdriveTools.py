@@ -618,7 +618,7 @@ class GoogleDriveHelper:
             for file in response.get('files', []):
                 if file.get('mimeType') == "application/vnd.google-apps.folder":  # Detect Whether Current Entity is a Folder or File.
                     furl = f"https://drive.google.com/drive/folders/{file.get('id')}"
-                    msg += f"📁 File Name : <code>{file.get('name')}</code><br>📥 Total Size : -<br>Type Files : Folder - (📁)<br>🔗 Link :-<br>"
+                    msg += f"📁 File Name : <code>{file.get('name')}</code><br>📥 Total Size : {get_readable_file_size(int(file.get('size')))}<br>⚙️ Type Files : Folder - 📁<br>🔗 Link :-<br>"
                     if SHORTENER is not None and SHORTENER_API is not None:
                         sfurl = short_url(furl)
                         msg += f"<b><a href={sfurl}>⚡ Google Drive ⚡</a></b>"
@@ -638,7 +638,7 @@ class GoogleDriveHelper:
                     # Excluded drive index as indexes cant download or open these shortcuts
                 else:
                     furl = f"https://drive.google.com/uc?id={file.get('id')}&export=download"
-                    msg += f"📄 File Name : <code>{file.get('name')}</code><br>📥 Total Size : ({get_readable_file_size(int(file.get('size')))})<br>Type Files : File - (📄)<br>🔗 Link :-<br>"  
+                    msg += f"📄 File Name : <code>{file.get('name')}</code><br>📥 Total Size : {get_readable_file_size(int(file.get('size')))}<br>⚙️ Type Files : File - 📄<br>🔗 Link :-<br>"  
                     if SHORTENER is not None and SHORTENER_API is not None:
                         sfurl = short_url(furl)
                         msg += f"<b><a href={sfurl}>⚡️ Google Drive ⚡️</a></b>"
@@ -710,10 +710,10 @@ class GoogleDriveHelper:
             if drive_file['mimeType'] == self.__G_DRIVE_DIR_MIME_TYPE:
                 self.gDrive_directory(**drive_file)
                 msg += f'<b>📄 File Name :</b> <code>{name}</code>'
-                msg += f'\n<b>📥 File Size : </b><code>{get_readable_file_size(self.total_bytes)}</code>'
+                msg += f'\n<b>📥 File Size : {get_readable_file_size(self.total_bytes)}</b>'
                 msg += f'\n<b>⚙️ Type File : Folder — 📁</b>'
                 msg += f'\n<b>🗂 Sub Folders : {self.total_folders}</b>'
-                msg += f'\n<b>📄 Total Files : </b><code>{self.total_files}</code>'
+                msg += f' | <b>📄 Total Files : {self.total_files}</b>'
             else:
                 msg += f'<b>📄 File Name : </b><code>{name}</code>'
                 try:
@@ -723,10 +723,10 @@ class GoogleDriveHelper:
                 try:
                     self.total_files += 1
                     self.gDrive_file(**drive_file)
-                    msg += f'\n<b>📥 File Size : </b><code>{get_readable_file_size(self.total_bytes)}</code>'
+                    msg += f'\n<b>📥 File Size : {get_readable_file_size(self.total_bytes)}</b>'
                     msg += f'\n<b>⚙️ Type File : File — 📃</b>'
-                    msg += f'\n<b>🧬 Category File : </b><code>{typee}</code>'
-                    msg += f'\n<b>📄 Total Files : </b><code>{self.total_files}</code>'
+                    msg += f' | <b>📄 Total Files : <code>{self.total_files}</b>'
+                    msg += f'\n<b>🧬 Category File :</b> <code>{typee}</code>'
                 except TypeError:
                     pass
         except Exception as err:
