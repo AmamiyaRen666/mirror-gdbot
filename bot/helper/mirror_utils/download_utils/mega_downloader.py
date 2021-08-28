@@ -122,7 +122,7 @@ class MegaAppListener(MegaListener):
 
     def cancel_download(self):
         self.is_cancelled = True
-        self.listener.onDownloadError("🚫 Download Canceled By User 🚫")
+        self.listener.onDownloadError("Download Canceled by user")
 
 
 class AsyncExecutor:
@@ -178,7 +178,7 @@ class MegaDownloadHelper:
                 gd = GoogleDriveHelper()
                 smsg, button = gd.drive_list(mname)
             if smsg:
-                msg1 = "✅ File/Folder is Already Available in Drive ✅\nHere ⤵️"
+                msg1 = "File/Folder is already available in Drive.\nHere are the search results:"
                 sendMarkup(msg1, listener.bot, listener.update, button)
                 executor.continue_event.set()
                 return

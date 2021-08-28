@@ -148,7 +148,7 @@ class GoogleDriveHelper:
         msg = ''
         try:
             res = self.__service.files().delete(fileId=file_id, supportsTeamDrives=IS_TEAM_DRIVE).execute()
-            msg = "✅ Successfully Deleted ✅"
+            msg = "✅ <b>Successfully Deleted</b> ✅"
         except HttpError as err:
             LOGGER.error(str(err))
             if "File not found" in str(err):
@@ -404,7 +404,7 @@ class GoogleDriveHelper:
                 msg += f'<b>📄 File Name :</b> <code>{meta.get("name")}</code>\n<b>📥 File Size : {get_readable_file_size(self.transferred_size)}</b>'
                 msg += f'\n<b>⚙️ Type File : Folder — 📁</b>'
                 msg += f'\n<b>🗂 Sub Folders : {self.total_folders}</b>'
-                msg += f'\n<b>📄 Total Files : {self.total_files}</b>'
+                msg += f' | <b>📄 Total Files : {self.total_files}</b>'
                 buttons = button_build.ButtonMaker()
                 if SHORTENER is not None and SHORTENER_API is not None:
                     surl = short_url(durl)
@@ -471,7 +471,7 @@ class GoogleDriveHelper:
             err = str(err).replace('>', '').replace('<', '')
             LOGGER.error(err)
             if "User rate limit exceeded" in str(err):
-                msg = "<b>🚫 The Download/Clone Quota For This File Has Been Exceeded. Because User Rate Limit Exceeded. Please Wait Tomorrow For File Reseting. 🚫</b>"
+                msg = "<b>🚫 The Download/Clone Quota For This File Has Been Exceeded. Because User Rate Limit Exceeded. Please Wait Tomorrow For File Resetting. 🚫</b>"
             elif "File not found" in str(err):
                 msg = "🚫 File Not Found 🚫"
             else:
@@ -618,7 +618,7 @@ class GoogleDriveHelper:
             for file in response.get('files', []):
                 if file.get('mimeType') == "application/vnd.google-apps.folder":  # Detect Whether Current Entity is a Folder or File.
                     furl = f"https://drive.google.com/drive/folders/{file.get('id')}"
-                    msg += f"📁 File Name : <code>{file.get('name')}</code><br>📥 Total Size : {get_readable_file_size(int(file.get('size')))}<br>⚙️ Type Files : Folder - 📁<br>🔗 Link :-<br>"
+                    msg += f"📁 File Name : <code>{file.get('name')}</code><br>📥 Total Size : -<br>⚙️ Type Files : Folder - 📁<br>🔗 Link :-<br>"
                     if SHORTENER is not None and SHORTENER_API is not None:
                         sfurl = short_url(furl)
                         msg += f"<b><a href={sfurl}>⚡ Google Drive ⚡</a></b>"
