@@ -31,25 +31,26 @@ def stats(update, context):
     cpuUsage = psutil.cpu_percent(interval=0.5)
     memory = psutil.virtual_memory().percent
     disk = psutil.disk_usage('/').percent
-    stats = f'<b>⏰ Uptime : {currentTime}</b>\n' \
-            f'<b>💨 Total Disk Space : {total}</b>\n' \
-            f'<b>📈 Used : {used}</b> ' \
-            f'<b>📉 Free : {free}</b>\n\n' \
-            f'<b>📊 Data Usage 📊</b>\n\n<b>🔺 Upload : {sent}</b>\n' \
-            f'<b>🔻 Download : {recv}</b>\n\n📊 <b>Performance Meter</b> 📊\n\n' \
-            f'<b> 🖥️ CPU  : {cpuUsage}%</b>\n ' \
-            f'<b>⚙️ RAM : {memory}%</b>\n ' \
-            f'<b>🗃️ DISK  : {disk}%</b>'
+    stats = f'<b>Bot Uptime:</b> <code>{currentTime}</code>\n' \
+            f'<b>Total Disk Space:</b> <code>{total}</code>\n' \
+            f'<b>Used:</b> <code>{used}</code> ' \
+            f'<b>Free:</b> <code>{free}</code>\n\n' \
+            f'<b>Upload:</b> <code>{sent}</code>\n' \
+            f'<b>Download:</b> <code>{recv}</code>\n\n' \
+            f'<b>CPU:</b> <code>{cpuUsage}%</code> ' \
+            f'<b>RAM:</b> <code>{memory}%</code> ' \
+            f'<b>DISK:</b> <code>{disk}%</code>'
     sendMessage(stats, context.bot, update)
 
 
 def start(update, context):
     start_string = f'''
-This Bot can mirroring your file/link download to upload on Google Drive (For Better Fast Speed & Full Speed Bandwidth).\n\n
+This bot can mirror all your links to Google Drive!
 Type /{BotCommands.HelpCommand} to get a list of available commands
 '''
     buttons = button_build.ButtonMaker()
-    buttons.buildbutton("😎", "https://t.me/hilmay619")
+    buttons.buildbutton("Repo", "https://github.com/SlamDevs/slam-mirrorbot")
+    buttons.buildbutton("Channel", "https://t.me/SlamMirrorUpdates")
     reply_markup = InlineKeyboardMarkup(buttons.build_menu(2))
     if CustomFilters.authorized_user(update) or CustomFilters.authorized_chat(update):
         if update.message.chat.type == "private" :
@@ -57,11 +58,11 @@ Type /{BotCommands.HelpCommand} to get a list of available commands
         else :
             sendMarkup(start_string, context.bot, update, reply_markup)
     else :
-        sendMarkup(f"🚫 Oops! You Are Not a Authorized User 🚫", context.bot, update, reply_markup)
+        sendMarkup(f"Oops! not a Authorized user.\nPlease deploy your own <b>slam-mirrorbot</b>.", context.bot, update, reply_markup)
 
 
 def restart(update, context):
-    restart_message = sendMessage("🔄 Restarting, Please Wait! 🔄", context.bot, update)
+    restart_message = sendMessage("Restarting, Please wait!", context.bot, update)
     # Save restart message object in order to reply to it after restarting
     with open(".restartmsg", "w") as f:
         f.truncate(0)
@@ -75,7 +76,7 @@ def ping(update, context):
     start_time = int(round(time.time() * 1000))
     reply = sendMessage("Starting Ping", context.bot, update)
     end_time = int(round(time.time() * 1000))
-    editMessage(f'🖥 PING {end_time - start_time} MS', reply)
+    editMessage(f'{end_time - start_time} ms', reply)
 
 
 def log(update, context):
@@ -210,7 +211,7 @@ def main():
     if os.path.isfile(".restartmsg"):
         with open(".restartmsg") as f:
             chat_id, msg_id = map(int, f)
-        bot.edit_message_text("🔄 Restarted successfully! ✅", chat_id, msg_id)
+        bot.edit_message_text("Restarted successfully!", chat_id, msg_id)
         os.remove(".restartmsg")
     bot.set_my_commands(botcmds)
 

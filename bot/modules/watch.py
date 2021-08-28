@@ -17,14 +17,11 @@ def _watch(bot: Bot, update, isTar=False):
     try:
         link = message_args[1]
     except IndexError:
-        msg = f"/{BotCommands.WatchCommand} : [yt_dl supported link] [quality] |[Custom Name] to mirror with youtube_dl.\n\n"
-        msg += "<b>Note :- Quality and Custom Name are optional</b>\n\nExample of quality :- audio, 144, 240, 360, 480, 720, 1080, 2160."
-        msg += "\n\n• <b>If you want to use Custom Filename</b>, enter it after |"
-        msg += f"\n\nExample :-\n<code>/{BotCommands.WatchCommand} https://youtu.be/QMOadtGpwlw 720 |Ikson - New Day </code>\n\n"
-        msg += "This file will be downloaded in 720p quality and it's name will be <b>Ikson - New Day</b>\n\n"
-        msg += "• <b>if you want to convert to .mp3 / typing audio after link</b>"
-        msg += f"\n\nExample :-\n<code>/{BotCommands.WatchCommand} https://youtu.be/QMOadtGpwlw audio</code>\n\n"
-        msg += "This file will be downloaded in .mp3/audio <b>Ikson - Alive.mp3</b>\n\n"
+        msg = f"/{BotCommands.WatchCommand} [youtube-dl supported link] [quality] |[CustomName] to mirror with youtube-dl.\n\n"
+        msg += "<b>Note: Quality and custom name are optional</b>\n\nExample of quality: audio, 144, 240, 360, 480, 720, 1080, 2160."
+        msg += "\n\nIf you want to use custom filename, enter it after |"
+        msg += f"\n\nExample:\n<code>/{BotCommands.WatchCommand} https://youtu.be/Pk_TthHfLeE 720 |Slam</code>\n\n"
+        msg += "This file will be downloaded in 720p quality and it's name will be <b>Slam</b>"
         sendMessage(msg, bot, update)
         return
     

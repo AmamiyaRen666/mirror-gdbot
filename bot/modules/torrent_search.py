@@ -50,11 +50,12 @@ async def return_search(query, page=1, sukebei=False):
                 splitted = urlsplit(link)
                 if splitted.scheme == 'magnet' and splitted.query:
                     link = f'<code>{link}</code>'
-                newtext = f'''<b>{a + 1}.</b> <b>📄 Title : {html.escape(i["title"])}</b>
-<b>🔗 Link :-</b> {link}
-<b>📥 Total Size : {i["nyaa_size"]}</b> 
-<b>🔍 Tracker :- 🧲 Seeds : {i["nyaa_seeders"]} | 🧲 Peers : {i["nyaa_leechers"]} </b>
-<b>🔖 Category : {i["nyaa_category"]}</b>\n\n'''
+                newtext = f'''<b>{a + 1}.</b> <code>{html.escape(i["title"])}</code>
+<b>Link:</b> <code>{link}</code>
+<b>Size:</b> <code>{i["nyaa_size"]}</code>
+<b>Seeders:</b> <code>{i["nyaa_seeders"]}</code>
+<b>Leechers:</b> <code>{i["nyaa_leechers"]}</code>
+<b>Category:</b> <code>{i["nyaa_category"]}</code>\n\n'''
                 futtext = text + newtext
                 if (a and not a % 10) or len((await parser.parse(futtext))['message']) > 4096:
                     results.append(text)
@@ -89,7 +90,7 @@ async def nyaa_search_sukebei(client, message):
 async def init_search(client, message, query, sukebei):
     result, pages, ttl = await return_search(query, sukebei=sukebei)
     if not result:
-        await message.reply_text('🚫 No Results Found 🚫')
+        await message.reply_text('No results found')
     else:
         buttons = [InlineKeyboardButton(f'1/{pages}', 'nyaa_nop'), InlineKeyboardButton(f'Next', 'nyaa_next')]
         if pages == 1:
@@ -181,7 +182,7 @@ class TorrentSearch:
         string = self.RESULT_STR.format(**values)
         extra = ""
         if "Files" in values:
-            tmp_str = "\n 🧲 [{Quality} - {Type} ({Size})]({Torrent}) : `{magnet}`"
+            tmp_str = "➲[{Quality} - {Type} ({Size})]({Torrent}): `{magnet}`"
             extra += "\n".join(
                 tmp_str.format(**f, magnet=self.format_magnet(f['Magnet']))
                 for f in values['Files']
@@ -189,7 +190,7 @@ class TorrentSearch:
         else:
             magnet = values.get('magnet', values.get('Magnet'))  # Avoid updating source dict
             if magnet:
-                extra += f"🧲 : `{self.format_magnet(magnet)}`"
+                extra += f"➲Magnet: `{self.format_magnet(magnet)}`"
         if (extra):
             string += "\n" + extra
         return string
@@ -221,11 +222,11 @@ class TorrentSearch:
 
     async def find(self, client, message):
         if len(message.command) < 2:
-            await message.reply_text(f"<b>Usage :</b> /{self.command} <b>Keyword / Query</b>")
+            await message.reply_text(f"Usage: /{self.command} query")
             return
 
         query = urlencode(message.text.split(None, 1)[1])
-        self.message = await message.reply_text("🔍 <b>Searching</b> 🔎")
+        self.message = await message.reply_text("Searching")
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(f"{self.source}/{query}") as resp:
@@ -237,7 +238,7 @@ class TorrentSearch:
                     self.response = result
                     self.response_range = range(0, len(self.response), self.RESULT_LIMIT)
         except:
-            await self.message.edit("🚫 <b>No Results Found</b> 🚫")
+            await self.message.edit("No Results Found.")
             return
         await self.update_message()
 
@@ -258,59 +259,59 @@ class TorrentSearch:
         await self.update_message()
 
 RESULT_STR_1337 = (
-    "📄 Name : `{Name}`\n"
-    "📥 Total Size : {Size}\n"
-    "🔍 Tracker :- 🧲 Seeds : {Seeders} | 🧲  Peers : {Leechers}"
+    "➲Name: `{Name}`\n"
+    "➲Size: {Size}\n"
+    "➲Seeders: {Seeders} || ➲Leechers: {Leechers}"
 )
 RESULT_STR_PIRATEBAY = (
-    "📄 Name : `{Name}`\n"
-    "📥 Total Size : {Size}\n"
-    "🔍 Tracker :- 🧲 Seeds : {Seeders} | 🧲  Peers : {Leechers}"
+    "➲Name: `{Name}`\n"
+    "➲Size: {Size}\n"
+    "➲Seeders: {Seeders} || ➲Leechers: {Leechers}"
 )
 RESULT_STR_TGX = (
-    "📄 Name : `{Name}`\n" 
-    "📥 Total Size : {Size}\n"
-    "🔍 Tracker :- 🧲 Seeds : {Seeders} | 🧲  Peers : {Leechers}"
+    "➲Name: `{Name}`\n" 
+    "➲Size: {Size}\n"
+    "➲Seeders: {Seeders} || ➲Leechers: {Leechers}"
 )
 RESULT_STR_YTS = (
-    "📄 Name : `{Name}`\n"
-    "📅 Released : {ReleasedDate}\n"
-    "💠 Genre: {Genre}\n"
-    "⭐️ Rating : {Rating}\n"
-    "👍 Likes : {Likes}\n"
-    "⏱️ Duration : {Runtime}\n"
-    "🈂️ Language : {Language}"
+    "➲Name: `{Name}`\n"
+    "➲Released on: {ReleasedDate}\n"
+    "➲Genre: {Genre}\n"
+    "➲Rating: {Rating}\n"
+    "➲Likes: {Likes}\n"
+    "➲Duration: {Runtime}\n"
+    "➲Language: {Language}"
 )
 RESULT_STR_EZTV = (
-    "📄 Name : `{Name}`\n"
-    "📥 Total Size : {Size}\n"
-    "🔍 Tracker :- 🧲 Seeds : {Seeders}"
+    "➲Name: `{Name}`\n"
+    "➲Size: {Size}\n"
+    "➲Seeders: {Seeders}"
 )
 RESULT_STR_TORLOCK = (
-    "📄 Name : `{Name}`\n"
-    "📥 Total Size : {Size}\n"
-    "🔍 Tracker :- 🧲 Seeds : {Seeders} | 🧲  Peers : {Leechers}"
+    "➲Name: `{Name}`\n"
+    "➲Size: {Size}\n"
+    "➲Seeders: {Seeders} || ➲Leechers: {Leechers}"
 )
 RESULT_STR_RARBG = (
-    "📄 Name : `{Name}`\n"
-    "📥 Total Size : {Size}\n"
-    "🔍 Tracker :- 🧲 Seeds : {Seeders} | 🧲  Peers : {Leechers}"
+    "➲Name: `{Name}`\n"
+    "➲Size: {Size}\n"
+    "➲Seeders: {Seeders} || ➲Leechers: {Leechers}"
 )
 RESULT_STR_ALL = (
-    "📄 Name : `{Name}`\n"
-    "📥 Total Size : {Size}\n"
-    "🔍 Tracker :- 🧲 Seeds : {Seeders} | 🧲  Peers : {Leechers}"
+    "➲Name: `{Name}`\n"
+    "➲Size: {Size}\n"
+    "➲Seeders: {Seeders} || ➲Leechers: {Leechers}"
 )
 
 torrents_dict = {
-    '1337x': {'source': "https://hilmay619-api.herokuapp.com/api/1337x/", 'result_str': RESULT_STR_1337},
-    'piratebay': {'source': "https://hilmay619-api.herokuapp.com/api/piratebay/", 'result_str': RESULT_STR_PIRATEBAY},
-    'tgx': {'source': "https://hilmay619-api.herokuapp.com/api/tgx/", 'result_str': RESULT_STR_TGX},
-    'yts': {'source': "https://hilmay619-api.herokuapp.com/api/yts/", 'result_str': RESULT_STR_YTS},
-    'eztv': {'source': "https://hilmay619-api.herokuapp.com/api/eztv/", 'result_str': RESULT_STR_EZTV},
-    'torlock': {'source': "https://hilmay619-api.herokuapp.com/api/torlock/", 'result_str': RESULT_STR_TORLOCK},
-    'rarbg': {'source': "https://hilmay619-api.herokuapp.com/api/rarbg/", 'result_str': RESULT_STR_RARBG},
-    'ts': {'source': "https://hilmay619-api.herokuapp.com/api/all/", 'result_str': RESULT_STR_ALL}
+    '1337x': {'source': "https://torrents--api.herokuapp.com/api/1337x/", 'result_str': RESULT_STR_1337},
+    'piratebay': {'source': "https://torrents--api.herokuapp.com/api/piratebay/", 'result_str': RESULT_STR_PIRATEBAY},
+    'tgx': {'source': "https://torrents--api.herokuapp.com/api/tgx/", 'result_str': RESULT_STR_TGX},
+    'yts': {'source': "https://torrents--api.herokuapp.com/api/yts/", 'result_str': RESULT_STR_YTS},
+    'eztv': {'source': "https://torrents--api.herokuapp.com/api/eztv/", 'result_str': RESULT_STR_EZTV},
+    'torlock': {'source': "https://torrents--api.herokuapp.com/api/torlock/", 'result_str': RESULT_STR_TORLOCK},
+    'rarbg': {'source': "https://torrents--api.herokuapp.com/api/rarbg/", 'result_str': RESULT_STR_RARBG},
+    'ts': {'source': "https://torrents--api.herokuapp.com/api/all/", 'result_str': RESULT_STR_ALL}
 }
 
 torrent_handlers = []
@@ -319,18 +320,17 @@ for command, value in torrents_dict.items():
 
 def searchhelp(update, context):
     help_string = '''
-Available :
-
-• /nyaasi [Keyword]
-• /sukebei [Keyword]
-• /1337x [Keyword]
-• /piratebay [Keyword]
-• /tgx [Keyword]
-• /yts [Keyword]
-• /eztv [Keyword]
-• /torlock [Keyword]
-• /rarbg [Keyword]
-• /ts [Keyword]
+<b>Torrent Search</b>
+• /nyaasi <i>[search query]</i>
+• /sukebei <i>[search query]</i>
+• /1337x <i>[search query]</i>
+• /piratebay <i>[search query]</i>
+• /tgx <i>[search query]</i>
+• /yts <i>[search query]</i>
+• /eztv <i>[search query]</i>
+• /torlock <i>[search query]</i>
+• /rarbg <i>[search query]</i>
+• /ts <i>[search query]</i>
 '''
     sendMessage(help_string, context.bot, update)
     
