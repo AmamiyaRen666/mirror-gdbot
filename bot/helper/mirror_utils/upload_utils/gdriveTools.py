@@ -618,7 +618,7 @@ class GoogleDriveHelper:
             for file in response.get('files', []):
                 if file.get('mimeType') == "application/vnd.google-apps.folder":  # Detect Whether Current Entity is a Folder or File.
                     furl = f"https://drive.google.com/drive/folders/{file.get('id')}"
-                    msg += f"📁 <code>{file.get('name')}<br>(Folder)</code><br>"
+                    msg += f"📁 File Name : <code>{file.get('name')}</code><br>📥 Total Size : -<br>Type Files : Folder - (📁)<br>🔗 Link :-<br>"
                     if SHORTENER is not None and SHORTENER_API is not None:
                         sfurl = short_url(furl)
                         msg += f"<b><a href={sfurl}>⚡ Google Drive ⚡</a></b>"
@@ -638,7 +638,7 @@ class GoogleDriveHelper:
                     # Excluded drive index as indexes cant download or open these shortcuts
                 else:
                     furl = f"https://drive.google.com/uc?id={file.get('id')}&export=download"
-                    msg += f"📄 File Name : <code>{file.get('name')}<br>📥 Total Size : ({get_readable_file_size(int(file.get('size')))})</code><br>🔗 Link :-<br>"
+                    msg += f"📄 File Name : <code>{file.get('name')}</code><br>📥 Total Size : ({get_readable_file_size(int(file.get('size')))})<br>Type Files : File - (📄)<br>🔗 Link :-<br>"  
                     if SHORTENER is not None and SHORTENER_API is not None:
                         sfurl = short_url(furl)
                         msg += f"<b><a href={sfurl}>⚡️ Google Drive ⚡️</a></b>"
