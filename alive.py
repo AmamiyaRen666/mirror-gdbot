@@ -18,5 +18,5 @@ else:
 
 if not IS_VPS and BASE_URL is not None:
     while True:
-        time.sleep(600)
+        time.sleep(0)
         status = requests.get(BASE_URL).status_code
