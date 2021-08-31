@@ -10,15 +10,15 @@ from bot.helper.telegram_helper.bot_commands import BotCommands
 def list_drive(update, context):
     try:
         search = update.message.text.split(' ',maxsplit=1)[1]
-        LOGGER.info(f"🔎 Searching : {search} 🔍")
-        reply = sendMessage('🔎 Searching . . . Please wait! 🔁', context.bot, update)
+        LOGGER.info(f"Searching : {search}")
+        reply = sendMessage('🔎 <b>Searching . . . Please wait!</b> 🔁', context.bot, update)
         gdrive = GoogleDriveHelper(None)
         msg, button = gdrive.drive_list(search)
 
         if button:
             editMessage(msg, reply, button)
         else:
-            editMessage(f'🚫 <b>No Result Found For <b>{search}</b> 🚫', reply, button)
+            editMessage(f'🚫 <b>No Result Found</b>🚫', reply, button)
 
     except IndexError:
         sendMessage('🚫 <b>Send Me a Keywords</b> 🚫', context.bot, update)

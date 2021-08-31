@@ -407,8 +407,8 @@ class GoogleDriveHelper:
                     msg = self.deletefile(durl)
                     LOGGER.info(f"{msg}")
                     return "🚫 Your Clone Has Been Stopped & Cloned Data Has Been Deleted 🚫", "🚫 Cancelled 🚫"
-                msg += f'<b>📄 File Name :</b> <code>{meta.get("name")}</code>\n<b>📥 File Size : {get_readable_file_size(self.transferred_size)}</b>'
-                msg += f'\n<b>⚙️ Type File : Folder — 📁</b>'
+                msg += f'<b>📄 File Name :</b> <code>{meta.get("name")}</code>\n<b>📥 Total Size : {get_readable_file_size(self.transferred_size)}</b>'
+                msg += f'\n<b>🔎 Type Files : Folder — 📁</b>'
                 msg += f'\n<b>🗂 Sub Folders : {self.total_folders}</b>'
                 msg += f' | <b>📄 Total Files : {self.total_files}</b>'
                 buttons = button_build.ButtonMaker()
@@ -440,8 +440,8 @@ class GoogleDriveHelper:
                 except:
                     typ = 'File'
                 try:
-                    msg += f'\n<b>📥 File Size : {get_readable_file_size(int(meta.get("size")))}</b>'
-                    msg += f'\n<b>⚙️ Type File : File — 📃</b>'
+                    msg += f'\n<b>📥 Total Size : {get_readable_file_size(int(meta.get("size")))}</b>'
+                    msg += f'\n<b>🔎 Type Files : File — 📃</b>'
                 except TypeError:
                     pass
                 if INDEX_URL is not None:
@@ -685,9 +685,9 @@ class GoogleDriveHelper:
         if self.num_of_path > 1:
             self.edit_telegraph()
 
-            msg = f"<b>🔎 Found {len(response['files'])} Results For {fileName} 🔍</b>"
-            buttons = button_build.ButtonMaker()   
-            buttons.buildbutton("↗️", f"https://telegra.ph/{self.path[0]}")
+        msg = f"<b>Found <code>{len(response['files'])}</code> Results For <code>{fileName}</code></b>"
+        buttons = button_build.ButtonMaker()
+        buttons.buildbutton("↗️ Check ↗️", f"https://telegra.ph/{self.path[0]}")
 
         return msg, InlineKeyboardMarkup(buttons.build_menu(1))
 
@@ -708,7 +708,7 @@ class GoogleDriveHelper:
             if drive_file['mimeType'] == self.__G_DRIVE_DIR_MIME_TYPE:
                 self.gDrive_directory(**drive_file)
                 msg += f'<b>📄 File Name :</b> <code>{name}</code>'
-                msg += f'\n<b>📥 File Size : {get_readable_file_size(self.total_bytes)}</b>'
+                msg += f'\n<b>📥 Total Size : {get_readable_file_size(self.total_bytes)}</b>'
                 msg += f'\n<b>⚙️ Type File : Folder — 📁</b>'
                 msg += f'\n<b>🗂 Sub Folders : {self.total_folders}</b>'
                 msg += f' | <b>📄 Total Files : {self.total_files}</b>'
@@ -721,7 +721,7 @@ class GoogleDriveHelper:
                 try:
                     self.total_files += 1
                     self.gDrive_file(**drive_file)
-                    msg += f'\n<b>📥 File Size : {get_readable_file_size(self.total_bytes)}</b>'
+                    msg += f'\n<b>📥 Total Size : {get_readable_file_size(self.total_bytes)}</b>'
                     msg += f'\n<b>⚙️ Type File : File — 📃</b>'
                     msg += f' | <b>📄 Total Files : <code>{self.total_files}</b>'
                     msg += f'\n<b>🧬 Category File :</b> <code>{typee}</code>'
@@ -896,9 +896,9 @@ class GoogleDriveHelper:
         self.is_cancelled = True
         if self.is_downloading:
             LOGGER.info(f"Cancelling Download: {self.name}")
-            self.__listener.onDownloadError('Download stopped by user!')
+            self.__listener.onDownloadError('Download Stopped By User!')
         elif self.is_cloning:
-            LOGGER.info(f"Cancelling Clone: {self.name}")
+            LOGGER.info(f"Cancelling Clone : {self.name}")
         elif self.is_uploading:
-            LOGGER.info(f"Cancelling Upload: {self.name}")
-            self.__listener.onUploadError('your upload has been stopped and uploaded data has been deleted!')
+            LOGGER.info(f"Cancelling Upload : {self.name}")
+            self.__listener.onUploadError('Your Upload Has Been Stopped and Uploaded Data Has Been Deleted!')

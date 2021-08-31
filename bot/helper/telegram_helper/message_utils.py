@@ -97,7 +97,7 @@ def update_all_messages():
         dlspeed = get_readable_file_size(dlspeed_bytes)
         ulspeed = get_readable_file_size(uldl_bytes)
         msg += f"<b>\n\n⚡️ Internet Speed Meter ⚡️</b>\n\n" \
-                    f"<b>🔽 D : {dlspeed}/s 🔻 </b> | <b>🔼 U : {ulspeed}/s 🔺</b>" 
+                    f"<b>🔻 D : {dlspeed}/s</b> | <b>🔺 U : {ulspeed}/s</b>" 
     with status_reply_dict_lock:
         for chat_id in list(status_reply_dict.keys()):
             if status_reply_dict[chat_id] and msg != status_reply_dict[chat_id].text:
@@ -144,7 +144,7 @@ def sendStatusMessage(msg, bot):
         dlspeed = get_readable_file_size(dlspeed_bytes)
         ulspeed = get_readable_file_size(uldl_bytes)
         progress += f"<b>\n\n⚡️ Internet Speed Meter ⚡️</b>\n\n" \
-                    f"<b>🔽 D : {dlspeed}/s 🔻 </b> | <b>🔼 U : {ulspeed}/s 🔺</b>"
+                    f"<b>🔻 D : {dlspeed}/s</b> | <b>🔺 U : {ulspeed}/s</b>"
     with status_reply_dict_lock:
         if msg.message.chat.id in list(status_reply_dict.keys()):
             try:
