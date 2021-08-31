@@ -17,24 +17,14 @@ def _watch(bot: Bot, update, isTar=False):
     try:
         link = message_args[1]
     except IndexError:
-		msg = f"<b>Open-Source Download Manager For Video & Audio from YouTube and over 1000 other Video Hosting Websites</b>"
-        msg += "\n\nTutorial ⤵️"
-        msg += "\n‼️ /{BotCommands.WatchCommand} [YTDL Supported Link] [Quality] | [Custom Name]"
-		msg = f"\n‼️ <b>Features Available :- Quality & Custom Name & Add Extension</b>"
-        msg += "\n‼️ <b>Quality Available :- audio (mp3), 144, 240, 360, 480, 720, 1080, 1440, 2160</b>"
-        msg += "\n‼️ <b>Supported Link :-</b> https://ytdl-org.github.io/youtube-dl/supportedsites.html"
-		msg = f"\n\nA. Custom File Name, Enter it After |"
-        msg += "\n\nExample :-"
-        msg += "\n<code>/{BotCommands.WatchCommand} https://youtu.be/QMOadtGpwlw 720 |Ikson - New Day.mp4</code>"
-		msg = f"\n\nThis file will be downloaded in 720p quality and its name will be Ikson - New Day.mp4"
-        msg += "\n\nB. Converting to .mp3"
-        msg += "\nExample :-"
-		msg = f"\n<code>/{BotCommands.WatchCommand} https://youtu.be/QMOadtGpwlw audio</code>"
-        msg += "\n\nThis file will be downloaded in .mp3/audio and its name will be Ikson - Alive.mp3"
-        msg += "\n\nC. Add Extension / Change Extension / Custom File Name"
-		msg = f"\n\nExample :-"
-        msg += "\n<code>/{BotCommands.WatchCommand} https://www.youtube.com/watch?v=kEm3PiNVEsI 720 |Ikson - Paradise.mp4</code>"
-        msg += "\n\nadd at the end of the word, for example .mp4 .mkv .mp3 and others"
+        msg = f"/{BotCommands.WatchCommand} : [yt_dl supported link] [quality] |[Custom Name] to mirror with youtube_dl.\n\n"
+        msg += "<b>Note :- Quality and Custom Name are optional</b>\n\nExample of quality :- audio, 144, 240, 360, 480, 720, 1080, 2160."
+        msg += "\n\n• <b>If you want to use Custom Filename</b>, enter it after |"
+        msg += f"\n\nExample :-\n<code>/{BotCommands.WatchCommand} https://youtu.be/QMOadtGpwlw 720 |Ikson - New Day </code>\n\n"
+        msg += "This file will be downloaded in 720p quality and it's name will be <b>Ikson - New Day</b>\n\n"
+        msg += "• <b>if you want to convert to .mp3 / typing audio after link</b>"
+        msg += f"\n\nExample :-\n<code>/{BotCommands.WatchCommand} https://youtu.be/QMOadtGpwlw audio</code>\n\n"
+        msg += "This file will be downloaded in .mp3/audio <b>Ikson - Alive.mp3</b>\n\n"
         sendMessage(msg, bot, update)
         return
     
