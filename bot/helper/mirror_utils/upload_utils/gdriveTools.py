@@ -616,11 +616,11 @@ class GoogleDriveHelper:
         if not response["files"]:
             return '', ''
 
-        msg += f'<h4>{len(response["files"])} Results : {fileName}</h4><br><br>'
+        msg += f'<h4>{len(response["files"])} Results: {fileName}</h4><br><br>'
         for file in response.get('files', []):
-            file.get('mimeType') == "application/vnd.google-apps.folder":  # Detect Whether Current Entity is a Folder or File.
-                    furl = f"https://drive.google.com/drive/folders/{file.get('id')}"
-                    msg += f"📁 File Name : <code>{file.get('name')}</code><br>📥 Total Size : -<br>⚙️ Type Files : Folder - 📁<br>🔗 Link :-<br>"
+            if file.get('mimeType') == "application/vnd.google-apps.folder":  # Detect Whether Current Entity is a Folder or File.
+                furl = f"https://drive.google.com/drive/folders/{file.get('id')}"
+                msg += f"📁 File Name : <code>{file.get('name')}</code><br>📥 Total Size : -<br>⚙️ Type Files : Folder - 📁<br>🔗 Link :-<br>"
                 if SHORTENER is not None and SHORTENER_API is not None:
                     sfurl = short_url(furl)
                     msg += f"<b><a href={sfurl}>⚡️ Google Drive ⚡️</a></b>"
