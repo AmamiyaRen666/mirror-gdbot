@@ -8,6 +8,7 @@ import feedparser
 import requests
 import itertools
 
+
 from telegram.ext import CommandHandler
 from telegram import ParseMode
 
@@ -22,7 +23,6 @@ from bot import app, dispatcher, IMAGE_URL
 from bot.helper import custom_filters
 from bot.helper.telegram_helper.bot_commands import BotCommands
 from bot.helper.telegram_helper.filters import CustomFilters
-from bot.helper.telegram_helper.message_utils import sendMessage
 
 search_lock = asyncio.Lock()
 search_info = {False: dict(), True: dict()}
@@ -50,8 +50,8 @@ async def return_search(query, page=1, sukebei=False):
                 splitted = urlsplit(link)
                 if splitted.scheme == 'magnet' and splitted.query:
                     link = f'<code>{link}</code>'
-                newtext = f'''<b>{a + 1}.</b> <b>📄 Title : {html.escape(i["title"])}</b>
-<b>🔗 Link :-</b> {link}
+                newtext = f'''<b>{a + 1}.</b> <b>Name : {html.escape(i["title"])}</b>
+<b>🔗 Link :</b> {link}
 <b>📥 Total Size : {i["nyaa_size"]}</b> 
 <b>🔍 Tracker :- 🧲 Seeds : {i["nyaa_seeders"]} | 🧲 Peers : {i["nyaa_leechers"]} </b>
 <b>🔖 Category : {i["nyaa_category"]}</b>\n\n'''
@@ -72,14 +72,14 @@ async def return_search(query, page=1, sukebei=False):
 message_info = dict()
 ignore = set()
 
-@app.on_message(filters.command(['nyaasi', f'nyaasi@{bot.username}']))
+@app.on_message(filters.command(['nyaasi']))
 async def nyaa_search(client, message):
     text = message.text.split(' ')
     text.pop(0)
     query = ' '.join(text)
     await init_search(client, message, query, False)
 
-@app.on_message(filters.command(['sukebei', f'sukebei@{bot.username}']))
+@app.on_message(filters.command(['sukebei']))
 async def nyaa_search_sukebei(client, message):
     text = message.text.split(' ')
     text.pop(0)
@@ -89,7 +89,7 @@ async def nyaa_search_sukebei(client, message):
 async def init_search(client, message, query, sukebei):
     result, pages, ttl = await return_search(query, sukebei=sukebei)
     if not result:
-        await message.reply_text('🚫 No Results Found 🚫')
+        await message.reply_text('🚫 No results found 🚫')
     else:
         buttons = [InlineKeyboardButton(f'1/{pages}', 'nyaa_nop'), InlineKeyboardButton(f'Next', 'nyaa_next')]
         if pages == 1:
@@ -166,7 +166,7 @@ class TorrentSearch:
         self.source = source.rstrip('/')
         self.RESULT_STR = result_str
 
-        app.add_handler(MessageHandler(self.find, filters.command([command, f'{self.command}@{bot.username}'])))
+        app.add_handler(MessageHandler(self.find, filters.command([command])))
         app.add_handler(CallbackQueryHandler(self.previous, filters.regex(f"{self.command}_previous")))
         app.add_handler(CallbackQueryHandler(self.delete, filters.regex(f"{self.command}_delete")))
         app.add_handler(CallbackQueryHandler(self.next, filters.regex(f"{self.command}_next")))
@@ -181,7 +181,7 @@ class TorrentSearch:
         string = self.RESULT_STR.format(**values)
         extra = ""
         if "Files" in values:
-            tmp_str = "\n 🧲 [{Quality} - {Type} ({Size})]({Torrent}) : `{magnet}`"
+            tmp_str = "\n\n 🧲 [{Quality} - {Type} ({Size})]({Torrent}) : `{magnet}`"
             extra += "\n".join(
                 tmp_str.format(**f, magnet=self.format_magnet(f['Magnet']))
                 for f in values['Files']
@@ -208,7 +208,7 @@ class TorrentSearch:
 
         res_lim = min(self.RESULT_LIMIT, len(self.response) - self.RESULT_LIMIT*self.index)
         result = f"**Page - {self.index+1}**\n\n"
-        result += "\n\n=======================\n\n".join(
+        result += "\n\n==============================================\n\n".join(
             self.get_formatted_string(self.response[self.response_range[self.index]+i])
             for i in range(res_lim)
         )
@@ -221,11 +221,11 @@ class TorrentSearch:
 
     async def find(self, client, message):
         if len(message.command) < 2:
-            await message.reply_text(f"<b>Usage :</b> /{self.command} <b>Keyword / Query</b>")
+            await message.reply_text(f"Usage: /{self.command} query")
             return
 
         query = urlencode(message.text.split(None, 1)[1])
-        self.message = await message.reply_text("🔍 <b>Searching</b> 🔎")
+        self.message = await message.reply_text("🔎 Searching 🔎")
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(f"{self.source}/{query}") as resp:
@@ -237,7 +237,7 @@ class TorrentSearch:
                     self.response = result
                     self.response_range = range(0, len(self.response), self.RESULT_LIMIT)
         except:
-            await self.message.edit("🚫 <b>No Results Found</b> 🚫")
+            await self.message.edit("🚫 No Results Found 🚫")
             return
         await self.update_message()
 
