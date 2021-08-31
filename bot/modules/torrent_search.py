@@ -50,7 +50,7 @@ async def return_search(query, page=1, sukebei=False):
                 splitted = urlsplit(link)
                 if splitted.scheme == 'magnet' and splitted.query:
                     link = f'<code>{link}</code>'
-                newtext = f'''<b>{a + 1}.</b> <b>Name : {html.escape(i["title"])}</b>
+                newtext = f'''<b>{a + 1}.</b> <b>📄 Title : {html.escape(i["title"])}</b>
 <b>🔗 Link :</b> {link}
 <b>📥 Total Size : {i["nyaa_size"]}</b> 
 <b>🔍 Tracker :- 🧲 Seeds : {i["nyaa_seeders"]} | 🧲 Peers : {i["nyaa_leechers"]} </b>
@@ -181,7 +181,7 @@ class TorrentSearch:
         string = self.RESULT_STR.format(**values)
         extra = ""
         if "Files" in values:
-            tmp_str = "\n\n 🧲 [{Quality} - {Type} ({Size})]({Torrent}) : `{magnet}`"
+            tmp_str = "\n 🧲 [{Quality} - {Type} ({Size})]({Torrent}) : `{magnet}`"
             extra += "\n".join(
                 tmp_str.format(**f, magnet=self.format_magnet(f['Magnet']))
                 for f in values['Files']
