@@ -190,6 +190,14 @@ try:
         STATUS_LIMIT = int(getConfig('STATUS_LIMIT'))
 except KeyError:
     STATUS_LIMIT = None
+    
+try:
+    IMAGE_URL = getConfig('IMAGE_URL')
+    if len(IMAGE_URL) == 0:
+        IMAGE_URL = 'https://telegra.ph/file/2326855aa5ba1d2520e47.jpg'
+except KeyError:
+    IMAGE_URL = 'https://telegra.ph/file/2326855aa5ba1d2520e47.jpg'
+    
 try:
     MEGA_API_KEY = getConfig('MEGA_API_KEY')
 except KeyError:

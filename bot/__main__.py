@@ -10,7 +10,7 @@ from sys import executable
 from telegram import ParseMode
 from telegram.ext import CommandHandler
 from wserver import start_server_async
-from bot import bot, dispatcher, updater, botStartTime, IGNORE_PENDING_REQUESTS, IS_VPS, SERVER_PORT
+from bot import bot, dispatcher, updater, IMAGE_URL, botStartTime, IGNORE_PENDING_REQUESTS, IS_VPS, SERVER_PORT
 from bot.helper.ext_utils import fs_utils
 from bot.helper.telegram_helper.bot_commands import BotCommands
 from bot.helper.telegram_helper.message_utils import *
@@ -40,24 +40,26 @@ def stats(update, context):
             f'<b> 🖥️ CPU  : {cpuUsage}%</b>\n ' \
             f'<b>⚙️ RAM : {memory}%</b>\n ' \
             f'<b>🗃️ DISK  : {disk}%</b>'
-    sendMessage(stats, context.bot, update)
+    update.effective_message.reply_photo(IMAGE_URL, stats, parse_mode=ParseMode.HTML)
 
 
 def start(update, context):
     start_string = f'''
-This Bot can mirroring your file/link download to upload on Google Drive (For Better Fast Speed & Full Speed Bandwidth).\n\n
+This Bot can mirroring your file/link download to upload on Google Drive (For Better Fast Speed & Full Speed Bandwidth).
 Type /{BotCommands.HelpCommand} to get a list of available commands
 '''
     buttons = button_build.ButtonMaker()
-    buttons.buildbutton("😎", "https://t.me/hilmay619")
+    buttons.buildbutton(" ↗️ ", "https://t.me/hilmay619")
     reply_markup = InlineKeyboardMarkup(buttons.build_menu(2))
+    LOGGER.info('UID: {} - UN: {} - MSG: {}'.format(update.message.chat.id, update.message.chat.username, update.message.text))
+    uptime = get_readable_time((time.time() - botStartTime))
     if CustomFilters.authorized_user(update) or CustomFilters.authorized_chat(update):
         if update.message.chat.type == "private" :
-            sendMarkup(start_string, context.bot, update, reply_markup)
+            sendMessage(f"Hey, I'm Alive 🙂\nSince : <code>{uptime}</code>", context.bot, update)
         else :
-            sendMarkup(start_string, context.bot, update, reply_markup)
+            update.effective_message.reply_photo(IMAGE_URL, start_string, parse_mode=ParseMode.MARKDOWN, reply_markup=reply_markup)
     else :
-        sendMarkup(f"🚫 Oops! You Are Not a Authorized User 🚫", context.bot, update, reply_markup)
+        sendMessage(f"🚫 Oops! You Not a Authorized User 🚫", context.bot, update)
 
 
 def restart(update, context):
