@@ -44,26 +44,24 @@ def stats(update, context):
 
 
 def start(update, context):
-    buttons = button_build.ButtonMaker()
-    buttons.buildbutton("😎", "https://t.me/hilmay619")
-    reply_markup = InlineKeyboardMarkup(buttons.build_menu(2))
-    if CustomFilters.authorized_user(update) or CustomFilters.authorized_chat(update):
     start_string = f'''
 This Bot can mirroring your file/link download to upload on Google Drive (For Better Fast Speed & Full Speed Bandwidth).\n\n
 Type /{BotCommands.HelpCommand} to get a list of available commands
 '''
-        sendMarkup(start_string, context.bot, update, reply_markup)
-    else:
-        sendMarkup(
-            '🚫 Oops! You Are Not a Authorized User 🚫',
-            context.bot,
-            update,
-            reply_markup,
-        )
+    buttons = button_build.ButtonMaker()
+    buttons.buildbutton("😎", "https://t.me/hilmay619")
+    reply_markup = InlineKeyboardMarkup(buttons.build_menu(2))
+    if CustomFilters.authorized_user(update) or CustomFilters.authorized_chat(update):
+        if update.message.chat.type == "private" :
+            sendMarkup(start_string, context.bot, update, reply_markup)
+        else :
+            sendMarkup(start_string, context.bot, update, reply_markup)
+    else :
+        sendMarkup(f"🚫 Oops! You Are Not a Authorized User 🚫", context.bot, update, reply_markup)
 
 
 def restart(update, context):
-    restart_message = sendMessage("🔄 Restarting . . . Please Wait! 🔄", context.bot, update)
+    restart_message = sendMessage("🔄 Restarting, Please Wait! 🔄", context.bot, update)
     # Save restart message object in order to reply to it after restarting
     with open(".restartmsg", "w") as f:
         f.truncate(0)
