@@ -17,7 +17,7 @@ from bot.helper.telegram_helper.message_utils import *
 from .helper.ext_utils.bot_utils import get_readable_file_size, get_readable_time
 from .helper.telegram_helper.filters import CustomFilters
 from bot.helper.telegram_helper import button_build
-from .modules import authorize, list, cancel_mirror, mirror_status, mirror, clone, watch, shell, eval, delete, speedtest, count, reboot
+from .modules import authorize, list, cancel_mirror, mirror_status, mirror, torrent_search, clone, watch, shell, eval, delete, speedtest, count, reboot
 
 
 def stats(update, context):
@@ -31,32 +31,31 @@ def stats(update, context):
     cpuUsage = psutil.cpu_percent(interval=0.5)
     memory = psutil.virtual_memory().percent
     disk = psutil.disk_usage('/').percent
-    stats = f'<b>Bot Uptime:</b> <code>{currentTime}</code>\n' \
-            f'<b>Total Disk Space:</b> <code>{total}</code>\n' \
-            f'<b>Used:</b> <code>{used}</code> ' \
-            f'<b>Free:</b> <code>{free}</code>\n\n' \
-            f'<b>Upload:</b> <code>{sent}</code>\n' \
-            f'<b>Download:</b> <code>{recv}</code>\n\n' \
-            f'<b>CPU:</b> <code>{cpuUsage}%</code> ' \
-            f'<b>RAM:</b> <code>{memory}%</code> ' \
-            f'<b>DISK:</b> <code>{disk}%</code>'
+    stats = f'<b>⏰ Uptime : {currentTime}</b>\n' \
+            f'<b>💨 Total Disk Space : {total}</b>\n' \
+            f'<b>📈 Used : {used}</b> ' \
+            f'<b>📉 Free : {free}</b>\n\n' \
+            f'<b>📊 Data Usage 📊</b>\n\n<b>🔺 Upload : {sent}</b>\n' \
+            f'<b>🔻 Download : {recv}</b>\n\n📊 <b>Performance Meter</b> 📊\n\n' \
+            f'<b> 🖥️ CPU  : {cpuUsage}%</b>\n ' \
+            f'<b>⚙️ RAM : {memory}%</b>\n ' \
+            f'<b>🗃️ DISK  : {disk}%</b>'
     sendMessage(stats, context.bot, update)
 
 
 def start(update, context):
     buttons = button_build.ButtonMaker()
-    buttons.buildbutton("Repo", "https://github.com/SlamDevs/slam-mirrorbot")
-    buttons.buildbutton("Channel", "https://t.me/SlamMirrorUpdates")
+    buttons.buildbutton("😎", "https://t.me/hilmay619")
     reply_markup = InlineKeyboardMarkup(buttons.build_menu(2))
     if CustomFilters.authorized_user(update) or CustomFilters.authorized_chat(update):
-        start_string = f'''
-This bot can mirror all your links to Google Drive!
+    start_string = f'''
+This Bot can mirroring your file/link download to upload on Google Drive (For Better Fast Speed & Full Speed Bandwidth).\n\n
 Type /{BotCommands.HelpCommand} to get a list of available commands
 '''
         sendMarkup(start_string, context.bot, update, reply_markup)
     else:
         sendMarkup(
-            'Oops! not a Authorized user.\nPlease deploy your own <b>slam-mirrorbot</b>.',
+            '🚫 Oops! You Are Not a Authorized User 🚫',
             context.bot,
             update,
             reply_markup,
@@ -64,7 +63,7 @@ Type /{BotCommands.HelpCommand} to get a list of available commands
 
 
 def restart(update, context):
-    restart_message = sendMessage("Restarting, Please wait!", context.bot, update)
+    restart_message = sendMessage("🔄 Restarting . . . Please Wait! 🔄", context.bot, update)
     # Save restart message object in order to reply to it after restarting
     with open(".restartmsg", "w") as f:
         f.truncate(0)
@@ -78,7 +77,7 @@ def ping(update, context):
     start_time = int(round(time.time() * 1000))
     reply = sendMessage("Starting Ping", context.bot, update)
     end_time = int(round(time.time() * 1000))
-    editMessage(f'{end_time - start_time} ms', reply)
+    editMessage(f'💠 Ping {end_time - start_time} Miliseconds', reply)
 
 
 def log(update, context):
@@ -138,6 +137,8 @@ def bot_help(update, context):
 /{BotCommands.ShellCommand}: Run commands in Shell (Terminal)
 
 /{BotCommands.ExecHelpCommand}: Get help for Executor module (Only Owner)
+
+/{BotCommands.TsHelpCommand}: Get help for Torrent search module
 '''
 
     help_string = f'''
@@ -168,6 +169,8 @@ def bot_help(update, context):
 /{BotCommands.StatsCommand}: Show Stats of the machine the bot is hosted on
 
 /{BotCommands.PingCommand}: Check how long it takes to Ping the Bot
+
+/{BotCommands.TsHelpCommand}: Get help for Torrent search module
 '''
 
     if CustomFilters.sudo_user(update) or CustomFilters.owner_filter(update):
@@ -194,7 +197,8 @@ botcmds = [
         (f'{BotCommands.StatsCommand}','Bot Usage Stats'),
         (f'{BotCommands.PingCommand}','Ping the Bot'),
         (f'{BotCommands.RestartCommand}','Restart the bot [owner/sudo only]'),
-        (f'{BotCommands.LogCommand}','Get the Bot Log [owner/sudo only]')
+        (f'{BotCommands.LogCommand}','Get the Bot Log [owner/sudo only]'),
+        (f'{BotCommands.TsHelpCommand}','Get help for Torrent search module')
     ]
 
 
@@ -208,7 +212,7 @@ def main():
     if os.path.isfile(".restartmsg"):
         with open(".restartmsg") as f:
             chat_id, msg_id = map(int, f)
-        bot.edit_message_text("Restarted successfully!", chat_id, msg_id)
+        bot.edit_message_text("🔄 Restarted successfully! ✅", chat_id, msg_id)
         os.remove(".restartmsg")
     bot.set_my_commands(botcmds)
 
