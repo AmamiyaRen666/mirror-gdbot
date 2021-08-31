@@ -16,19 +16,19 @@ def authorize(update, context):
     if len(message_) == 2:
         user_id = int(message_[1])
         if user_id in AUTHORIZED_CHATS:
-            msg = 'User Already Authorized'
+            msg = '✅ <b>User Already Authorized</b> ✅'
         elif DB_URI is not None:
             msg = DbManger().db_auth(user_id)
         else:
             with open('authorized_chats.txt', 'a') as file:
                 file.write(f'{user_id}\n')
                 AUTHORIZED_CHATS.add(user_id)
-                msg = 'User Authorized'
+                msg = '✅ <b>User Authorized</b> ✅'
     elif reply_message is None:
         # Trying to authorize a chat
         chat_id = update.effective_chat.id
         if chat_id in AUTHORIZED_CHATS:
-            msg = 'Chat Already Authorized'
+            msg = '✅ <b>Chat Already Authorized</b> ✅'
 
         elif DB_URI is not None:
             msg = DbManger().db_auth(chat_id)
@@ -36,19 +36,19 @@ def authorize(update, context):
             with open('authorized_chats.txt', 'a') as file:
                 file.write(f'{chat_id}\n')
                 AUTHORIZED_CHATS.add(chat_id)
-                msg = 'Chat Authorized'
+                msg = '✅ <b>Chat Authorized</b> ✅'
     else:
         # Trying to authorize someone by replying
         user_id = reply_message.from_user.id
         if user_id in AUTHORIZED_CHATS:
-            msg = 'User Already Authorized'
+            msg = '✅ <b>User Already Authorized</b> ✅'
         elif DB_URI is not None:
             msg = DbManger().db_auth(user_id)
         else:
             with open('authorized_chats.txt', 'a') as file:
                 file.write(f'{user_id}\n')
                 AUTHORIZED_CHATS.add(user_id)
-                msg = 'User Authorized'
+                msg = '✅ <b>User Authorized</b> ✅'
     sendMessage(msg, context.bot, update)
 
 
@@ -64,9 +64,9 @@ def unauthorize(update, context):
                 msg = DbManger().db_unauth(user_id)
             else:
                 AUTHORIZED_CHATS.remove(user_id)
-                msg = 'User Unauthorized'
+                msg = '🚫 <b>User Unauthorized</b> 🚫'
         else:
-            msg = 'User Already Unauthorized'
+            msg = '🚫 <b>User Already Unauthorized</b> 🚫'
     elif reply_message is None:
         # Trying to unauthorize a chat
         chat_id = update.effective_chat.id
@@ -75,9 +75,9 @@ def unauthorize(update, context):
                 msg = DbManger().db_unauth(chat_id)
             else:
                 AUTHORIZED_CHATS.remove(chat_id)
-                msg = 'Chat Unauthorized'
+                msg = '🚫 <b>Chat Unauthorized</b> 🚫'
         else:
-            msg = 'Chat Already Unauthorized'
+            msg = '🚫 <b>Chat Already Unauthorized</b> 🚫'
     else:
         # Trying to authorize someone by replying
         user_id = reply_message.from_user.id
@@ -86,9 +86,9 @@ def unauthorize(update, context):
                 msg = DbManger().db_unauth(user_id)
             else:
                 AUTHORIZED_CHATS.remove(user_id)
-                msg = 'User Unauthorized'
+                msg = '🚫 <b>User Unauthorized</b> 🚫'
         else:
-            msg = 'User Already Unauthorized'
+            msg = '🚫 <b>User Already Unauthorized</b> 🚫'
     with open('authorized_chats.txt', 'a') as file:
         file.truncate(0)
         for i in AUTHORIZED_CHATS:
@@ -104,28 +104,28 @@ def addSudo(update, context):
     if len(message_) == 2:
         user_id = int(message_[1])
         if user_id in SUDO_USERS:
-            msg = 'Already Sudo'
+            msg = '✅ <b>User Already Sudo Permission</b> ✅'
         elif DB_URI is not None:
             msg = DbManger().db_addsudo(user_id)
         else:
             with open('sudo_users.txt', 'a') as file:
                 file.write(f'{user_id}\n')
                 SUDO_USERS.add(user_id)
-                msg = 'Promoted as Sudo'
+                msg = '✅ <b>Promoted as Sudo Permission</b> ✅'
     elif reply_message is None:
-        msg = "Give ID or Reply To message of whom you want to Promote"
+        msg = "🚫 <b>Give Me Telegram ID or Reply to the Person's Message</b> 🚫"
     else:
         # Trying to authorize someone by replying
         user_id = reply_message.from_user.id
         if user_id in SUDO_USERS:
-            msg = 'Already Sudo'
+            msg = '✅ <b>User Already Sudo Permission</b> ✅'
         elif DB_URI is not None:
             msg = DbManger().db_addsudo(user_id)
         else:
             with open('sudo_users.txt', 'a') as file:
                 file.write(f'{user_id}\n')
                 SUDO_USERS.add(user_id)
-                msg = 'Promoted as Sudo'
+                msg = '✅ <b>Promoted as Sudo Permission</b> ✅'
     sendMessage(msg, context.bot, update)
 
 
@@ -143,9 +143,9 @@ def removeSudo(update, context):
                 SUDO_USERS.remove(user_id)
                 msg = 'Demoted'
         else:
-            msg = 'Not a Sudo'
+            msg = '🚫 <b>Not a Sudo Permission</b> 🚫'
     elif reply_message is None:
-        msg = "Give ID or Reply To message of whom you want to remove from Sudo"
+            msg = "🚫 <b>Give Me Telegram ID or Reply to the Person's Message</b> 🚫"
     else:
         user_id = reply_message.from_user.id
         if user_id in SUDO_USERS:
@@ -155,7 +155,7 @@ def removeSudo(update, context):
                 SUDO_USERS.remove(user_id)
                 msg = 'Demoted'
         else:
-            msg = 'Not a Sudo'
+            msg = '🚫 <b>Not a Sudo Permission</b> 🚫'
     if DB_URI is None:
         with open('sudo_users.txt', 'a') as file:
             file.truncate(0)
@@ -168,7 +168,7 @@ def sendAuthChats(update, context):
     user = sudo = ''
     user += '\n'.join(str(id) for id in AUTHORIZED_CHATS)
     sudo += '\n'.join(str(id) for id in SUDO_USERS)
-    sendMessage(f'<b><u>Authorized Chats</u></b>\n<code>{user}</code>\n<b><u>Sudo Users</u></b>\n<code>{sudo}</code>', context.bot, update)
+    sendMessage(f'<b>✅ Authorized Chats ✅ </b>\n{user}\n<b> ✅ Sudo Users ✅ </b>\n{sudo}', context.bot, update)
 
 
 send_auth_handler = CommandHandler(command=BotCommands.AuthorizedUsersCommand, callback=sendAuthChats,

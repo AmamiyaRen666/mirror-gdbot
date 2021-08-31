@@ -51,7 +51,7 @@ class qbittorrent:
                 self.ext_hash = get_hash_magnet(link)
             tor_info = self.client.torrents_info(torrent_hashes=self.ext_hash)
             if len(tor_info) > 0:
-                sendMessage("This Torrent is already in list.", listener.bot, listener.update)
+                sendMessage("✅ This Torrent Already in List ✅", listener.bot, listener.update)
                 self.client.auth_log_out()
                 return
             if is_file:
@@ -64,7 +64,7 @@ class qbittorrent:
                 if len(tor_info) == 0:
                     while True:
                         if time.time() - self.meta_time >= 20:
-                            sendMessage("The Torrent was not added. Report when you see this error", listener.bot, listener.update)
+                            sendMessage("🚫 The Torrent Was Not Added 🚫", listener.bot, listener.update)
                             self.client.torrents_delete(torrent_hashes=self.ext_hash, delete_files=True)
                             self.client.auth_log_out()
                             return False
@@ -72,7 +72,7 @@ class qbittorrent:
                         if len(tor_info) > 0:
                             break
             else:
-                sendMessage("This is an unsupported/invalid link.", listener.bot, listener.update)
+                sendMessage("🚫 Unsupported/Invalid Link 🚫", listener.bot, listener.update)
                 self.client.torrents_delete(torrent_hashes=self.ext_hash, delete_files=True)
                 self.client.auth_log_out()
                 return
@@ -84,7 +84,7 @@ class qbittorrent:
             self.updater = setInterval(self.update_interval, self.update)
             if BASE_URL is not None and qbitsel:
                 if not is_file:
-                    meta = sendMessage("Downloading Metadata...Please wait then you can select files or mirror Torrent file if it have low seeders", listener.bot, listener.update)
+                    meta = sendMessage("🔻 Downloading Metadata . . . Please Wait 🔄", listener.bot, listener.update)
                     while True:
                             tor_info = self.client.torrents_info(torrent_hashes=self.ext_hash)
                             if len(tor_info) == 0:
@@ -111,17 +111,17 @@ class qbittorrent:
                 pindata = f"pin {gid} {pincode}"
                 donedata = f"done {gid} {self.ext_hash}"
                 buttons = button_build.ButtonMaker()
-                buttons.buildbutton("Select Files", URL)
-                buttons.sbutton("Pincode", pindata)
-                buttons.sbutton("Done Selecting", donedata)
+                buttons.buildbutton("↗️ Select Files ↗️", URL)
+                buttons.sbutton("↗️ Pincode ↗️", pindata)
+                buttons.sbutton("↗️ Done Selecting ↗️", donedata)
                 QBBUTTONS = InlineKeyboardMarkup(buttons.build_menu(2))
-                msg = "Your download paused. Choose files then press Done Selecting button to start downloading."
+                msg = "▶️ Your Download Paused ▶️ Press Done Selecting Button to Start Downloading ⏸"
                 sendMarkup(msg, listener.bot, listener.update, QBBUTTONS)
             else:
                 sendStatusMessage(listener.update, listener.bot)
         except qba.UnsupportedMediaType415Error as e:
             LOGGER.error(str(e))
-            sendMessage("This is an unsupported/invalid link: {str(e)}", listener.bot, listener.update)
+            sendMessage("🚫 Unsupported/Invalid Link 🚫 : {str(e)}", listener.bot, listener.update)
             self.client.torrents_delete(torrent_hashes=self.ext_hash, delete_files=True)
             self.client.auth_log_out()
         except Exception as e:
@@ -173,7 +173,7 @@ class qbittorrent:
                 if time.time() - self.stalled_time >= 999999999: # timeout after downloading metadata
                     self.client.torrents_pause(torrent_hashes=self.ext_hash)
                     time.sleep(0.3)
-                    self.listener.onDownloadError("Dead Torrent!")
+                    self.listener.onDownloadError("Dead Torrent")
                     self.client.torrents_delete(torrent_hashes=self.ext_hash)
                     self.client.auth_log_out()
                     self.updater.cancel()
