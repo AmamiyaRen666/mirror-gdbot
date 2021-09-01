@@ -17,7 +17,7 @@ from bot.helper.telegram_helper.message_utils import *
 from .helper.ext_utils.bot_utils import get_readable_file_size, get_readable_time
 from .helper.telegram_helper.filters import CustomFilters
 from bot.helper.telegram_helper import button_build
-from .modules import authorize, list, cancel_mirror, mirror_status, mirror, torrent_search, clone, watch, shell, eval, delete, speedtest, count, reboot
+from .modules import authorize, list, cancel_mirror, mirror_status, mirror, torrent_search, clone, watch, delete, speedtest, reboot
 
 
 def stats(update, context):
@@ -77,7 +77,7 @@ def ping(update, context):
     start_time = int(round(time.time() * 1000))
     reply = sendMessage("Starting Ping", context.bot, update)
     end_time = int(round(time.time() * 1000))
-    editMessage(f'💠 Ping {end_time - start_time} Miliseconds', reply)
+    editMessage(f'{end_time - start_time} ms', reply)
 
 
 def log(update, context):
@@ -108,9 +108,17 @@ def bot_help(update, context):
 
 /{BotCommands.CancelMirror}: Cancel Mirror
 
+/{BotCommands.AddSudoCommand}: Add Sudo User (Only Owner)
+
+/{BotCommands.RmSudoCommand}: Remove Sudo Users (Only Owner)
+
 /{BotCommands.ListCommand} [keywords] : Search File/Folder in the Google Drive
 
 /{BotCommands.StatusCommand}: Shows a status of all the Downloads
+
+/{BotCommands.AuthorizeCommand}: Authorize a chat or a user to use the bot (Can only be invoked by Owner & Sudo of the bot)
+
+/{BotCommands.UnAuthorizeCommand}: Unauthorize a chat or a user to use the bot (Can only be invoked by Owner & Sudo of the bot)
 
 /{BotCommands.PingCommand}: Check Bot Alive/Dead
 
@@ -142,6 +150,14 @@ def bot_help(update, context):
 
 /{BotCommands.CancelMirror}: Cancel Mirror
 
+/{BotCommands.AddSudoCommand}: Add Sudo User (Only Owner)
+
+/{BotCommands.RmSudoCommand}: Remove Sudo Users (Only Owner)
+
+/{BotCommands.AuthorizeCommand}: Authorize a Chat or a User to use the Bot
+
+/{BotCommands.UnAuthorizeCommand}: Unauthorize a Chat or a User to use the Bot 
+
 /{BotCommands.ListCommand} [keywords] : Search File/Folder in the Google Drive
 
 /{BotCommands.StatusCommand}: Shows a status of all the Downloads
@@ -170,9 +186,12 @@ botcmds = [
         (f'{BotCommands.WatchCommand}','Mirror YouTube-DL'),
         (f'{BotCommands.TarWatchCommand}','Mirror YouTube-DL as .tar'),
         (f'{BotCommands.CancelMirror}','Cancel Mirror'),
+        (f'{BotCommands.CancelAllCommand}','Cancel all tasks'),
         (f'{BotCommands.ListCommand}','Search Files in Drive'),
         (f'{BotCommands.StatusCommand}','Check Status Mirror'),
         (f'{BotCommands.StatsCommand}','Bot Usage'),
+        (f'{BotCommands.PingCommand}','Ping the Bot'),
+        (f'{BotCommands.RestartCommand}','Restart the bot [owner/sudo only]'),
         (f'{BotCommands.TsHelpCommand}','Torrent Search Module')
     ]
 
