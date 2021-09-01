@@ -146,16 +146,16 @@ def get_readable_message():
                     else:
                         msg += f"\n🔻 <b>Downloaded : {get_readable_file_size(download.processed_bytes())} of {download.size()}</b> "
                     msg += f"\n<b>⚡️ Speed : {download.speed()}</b>" \
-                           f"\n<b>⏳ ETA : {download.eta()} </b>"
+                           f"\n<b>⏳ ETA : {download.eta()}</b>"
                     # if hasattr(download, 'is_torrent'):
                     try:
-                        msg += f"\n<b>🔍 Tracker :- 🧲 Seeders : {download.aria_download().num_seeders}</b>" \
+                        msg += f"\n<b>🔍 Tracker :- 🧲 Seeds : {download.aria_download().num_seeders}</b>" \
                             f" | <b>🧲 Peers : {download.aria_download().connections}</b>"
                     except:
                         pass
                     try:
-                        msg += f"\n<b>🔍 Tracker :- 🧲 Seeders : {download.torrent_info().num_seeds}</b>" \
-                            f" | <b>🧲 Leechers : {download.torrent_info().num_leechs}</b>"
+                        msg += f"\n<b>🔍 Tracker :- 🧲 Seeds : {download.torrent_info().num_seeds}</b>" \
+                            f" | <b>🧲 Leechs : {download.torrent_info().num_leechs}</b>"
                     except:
                         pass
                     msg += f"\n<b>🔰 GID : {download.gid()}</b>" \

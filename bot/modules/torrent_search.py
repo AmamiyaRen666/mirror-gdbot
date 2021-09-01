@@ -89,7 +89,7 @@ async def nyaa_search_sukebei(client, message):
 async def init_search(client, message, query, sukebei):
     result, pages, ttl = await return_search(query, sukebei=sukebei)
     if not result:
-        await message.reply_text('🚫 No results found 🚫')
+        await message.reply_text('🚫 <b>No Results Found</b> 🚫')
     else:
         buttons = [InlineKeyboardButton(f'1/{pages}', 'nyaa_nop'), InlineKeyboardButton(f'Next', 'nyaa_next')]
         if pages == 1:
@@ -225,7 +225,7 @@ class TorrentSearch:
             return
 
         query = urlencode(message.text.split(None, 1)[1])
-        self.message = await message.reply_text("🔎 Searching 🔎")
+        self.message = await message.reply_text("🔎 <b>Searching</b> 🔍")
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(f"{self.source}/{query}") as resp:
@@ -237,7 +237,7 @@ class TorrentSearch:
                     self.response = result
                     self.response_range = range(0, len(self.response), self.RESULT_LIMIT)
         except:
-            await self.message.edit("🚫 No Results Found 🚫")
+            await self.message.edit("🚫 <b>No Results Found</b> 🚫")
             return
         await self.update_message()
 

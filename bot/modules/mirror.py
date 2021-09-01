@@ -134,7 +134,7 @@ class MirrorListener(listeners.MirrorListeners):
             uname = f"@{self.message.from_user.username}"
         else:
             uname = f'<a href="tg://user?id={self.message.from_user.id}">{self.message.from_user.first_name}</a>'
-        msg = f"Hai! {uname}\n\n 😓 Your Download Has Been Stopped Because {error}"
+        msg = f"<b>Hai!</b> {uname}✨\n\n 🚫 <b>Your Download Has Been Stopped. Because</b> {error}"
         sendMessage(msg, self.bot, self.update)
         if count == 0:
             self.clean()
@@ -155,8 +155,8 @@ class MirrorListener(listeners.MirrorListeners):
                 msg += f'\n<b>🗂 Sub Folders : {folders}</b>'
                 msg += f' | <b>📄 Total Files : {files}</b>'
             else:
-                msg += f'\n<b>🧬 Category : {typ}</b>'
                 msg += f'\n<b>🔎 Type Files : File — 📄</b>'
+                msg += f'\n<b>🧬 Category : {typ}</b>'
             buttons = button_build.ButtonMaker()
             if SHORTENER is not None and SHORTENER_API is not None:
                 surl = short_url(link)
